@@ -12,16 +12,20 @@ EM_SOURCES := $(shell find $(FLECS_D)$(EM_SRC_D) -name '*.c')
 EM_OBJS = $(subst .c,.o,$(patsubst $(FLECS_D)$(EM_SRC_D)%,$(FLECS_D)$(EM_OBJ_D)%,$(EM_SOURCES)))
 EMC_FLAGS := -I$(FLECS_D)include -c -Wall -fPIC -DPRIVATE -DFLECS_STATIC -DFLECS_IMPL
 
-PHONYS = flecs_ems_static clean_flex
+PHONYS = copy_headers flecs_ems_static clean_flex
 
 flecs_ems_static: flecs $(FLECS_D)$(EM_BLD_D)libflecs_static.bc
 	
 flecs:
 	git clone $(FLECS_GIT_REPO) && mkdir $(FLECS_D)build && mkdir $(FLECS_D)obj;\
+	cp -fr $(FLECS_D)/include libs
 	cd flecs/build/;\
 	cmake ..;\
 	make
 	
+copy_headers:
+	cp -fr $(FLECS_D)/include libs
+	cp -fr $(FLECS_D)/include/flecs/*.* libs/include/flecs
 
 $(FLECS_D)$(EM_BLD_D)libflecs_static.bc: $(EM_OBJS)
 	$(EMAR) rcs $@ $^
@@ -36,4 +40,6 @@ $(FLECS_D)$(EM_OBJ_D)%.o: $(FLECS_D)$(EM_SRC_D)%.c
 
 clean_flex:
 	rm -fR $(FLECS_D)
-	rm libs/static/libflecs_static.bc
+	rm -f libs/static/libflecs_static.*
+	rm -fr libs/include/flecs
+	rm -fr libs/include/flecs.h
