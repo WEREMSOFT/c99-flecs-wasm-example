@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <flecs.h>
 
-ecs_world_t *world = {0};
+ecs_world_t *world;
 
 #if defined(PLATFORM_WEB)
 #include <emscripten/emscripten.h>
