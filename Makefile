@@ -64,7 +64,7 @@ endif
 
 .PHONY: $(PHONYS) html test run_% debug_optimized debug_unoptimized print_information create_folder_structure run_html_u run_html_o run_performance_test init_project
 
-all: print_information $(BLD_D)main.$(BIN_EXTENSION) html
+all: print_information create_folders flecs_ems_static $(BLD_D)main.$(BIN_EXTENSION) html
 
 $(OBJ_D)%.o: $(SRC_D)%.c
 	$(CC_COMMAND) -o $(OBJ_D)$@ $^ $(LINK_LIBS)
@@ -77,7 +77,7 @@ $(TEST_BLD_D)%.spec.$(BIN_EXTENSION): $(TEST_SRC_D)%.spec.c
 	
 $(BLD_D)%.$(BIN_EXTENSION): $(SRC_D)%.c
 	@echo "### Building tests for $(@) START ###"
-	$(CC_COMMAND) $(LINK_LIBS) -o $@ $^ 
+	$(CC_COMMAND) -o $@ $^ $(LINK_LIBS) 
 	@echo "### End ###"
 	@echo ""
 
